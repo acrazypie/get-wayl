@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>WAYL · What are you listening to?</title>
+    <meta name="description" content="WAYL is a self-hosted music log. It logs what you play on Plex or Navidrome, streams your own library in the browser, and keeps your listening history on your machine.">
+    <meta property="og:title" content="WAYL · What are you listening to?">
+    <meta property="og:description" content="A self-hosted music log for Plex and Navidrome. Your listening history stays on your machine.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <script>
+        /* set the theme before first paint: saved choice, else the system setting */
+        (function () {
+            var t; try { t = localStorage.getItem("theme"); } catch (e) {}
+            if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", t);
+        })();
+    </script>
+    <link rel="preload" href="assets/fonts/syne-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/dm-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav" id="nav" aria-label="Main">
+    <a href="./" class="nav__logo" aria-label="WAYL home"><img src="assets/logo.svg" alt="" width="24" height="24">wayl</a>
+    <div class="nav__links">
+        <a href="#what">what it does</a>
+        <a href="#sharing">sharing</a>
+        <a href="setup.html">setup guide</a>
+        <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch light or dark theme">
+            <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        </button>
+    </div>
+    <button type="button" class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="drawer" id="drawer">
+    <a href="#what">what it does</a>
+    <a href="#sharing">sharing</a>
+    <a href="setup.html">setup guide</a>
+    <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+    <button type="button" class="drawer__theme" data-theme-toggle>
+        <span>theme</span>
+        <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+    </button>
+</div>
+
+<main id="main">
+    <section class="hero">
+        <h1 class="hero__q in-1"><span>What are</span><span>you listening</span><span class="dimmed">to?</span></h1>
+
+        <div class="answer in-2" id="answer" aria-live="polite">
+            <div class="eq" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="answer__track" id="answer-track">Midnight Drive · Neon Harbor</div>
+            <div class="answer__meta" id="answer-meta">logged from Navidrome · <b>in your library</b></div>
+        </div>
+
+        <div class="in-3">
+            <p class="hero__desc">WAYL answers that for you. It runs on your own server, logs everything you play on Plex or Navidrome, and streams your own music in the browser. Your listening history stays on your machine.</p>
+            <div class="actions">
+                <a class="btn" href="setup.html">Set up WAYL</a>
+                <a class="link link--down" href="#what">what it does <span class="ico">↓</span></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="what">
+        <div class="split">
+            <div>
+                <p class="tag">what it does</p>
+                <h2 class="h2">A log of everything you play.</h2>
+                <p class="lede">WAYL runs next to the music server you already have. Keep using your usual player, and WAYL keeps the record.</p>
+            </div>
+            <ul class="rows">
+                <li class="row"><span class="row__title">Logs plays on its own</span><span class="row__text">Plays on Plex and Navidrome are logged automatically. Any player that can scrobble to ListenBrainz can send its plays to WAYL too.</span></li>
+                <li class="row"><span class="row__title">Finds any song</span><span class="row__text">Search uses the open MusicBrainz and ListenBrainz databases. You don't need an API key or a catalog of your own.</span></li>
+                <li class="row"><span class="row__title">Plays your own files</span><span class="row__text">Songs on your server play right in the browser. The audio passes through WAYL, so your server's address and login stay hidden.</span></li>
+                <li class="row"><span class="row__title">Keeps playlists in sync</span><span class="row__text">Make playlists in WAYL, or mirror the ones on your server and keep them up to date.</span></li>
+                <li class="row"><span class="row__title">Shows your top songs</span><span class="row__text">Your most played songs and artists for the last week, month, year, or any range you pick.</span></li>
+                <li class="row"><span class="row__title">Stays on your machine</span><span class="row__text">Everything lives in one SQLite file on your server, and server logins are stored encrypted. There's <strong>no tracking and no cloud account</strong>.</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section" id="how">
+        <div class="split">
+            <div>
+                <p class="tag">getting started</p>
+                <h2 class="h2">Running in about five minutes.</h2>
+                <p class="lede">If your machine runs Docker, it can run WAYL.</p>
+                <p class="lede"><a class="link" href="setup.html">full setup guide <span class="ico">↗</span></a></p>
+            </div>
+            <ol class="steps">
+                <li><div><span class="row__title">Start it</span><p class="row__text">Clone the repo and run <code>docker compose up -d</code>. That starts the app and a small worker that keeps it in sync.</p></div></li>
+                <li><div><span class="row__title">Connect your server</span><p class="row__text">Add Navidrome with its address and login, or sign in with Plex. WAYL indexes your library and starts logging.</p></div></li>
+                <li><div><span class="row__title">Listen as usual</span><p class="row__text">WAYL logs every play, marks the songs you own and builds your stats as you go.</p></div></li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="section" id="sharing">
+        <div class="split">
+            <div>
+                <span class="status">in development</span>
+                <h2 class="h2">Share playlists between servers.</h2>
+                <p class="lede">Your WAYL can publish a read-only link to a playlist. A friend pastes it into their own WAYL and sees which songs they already have. They play those from their own server and can copy the playlist into theirs.</p>
+                <p class="lede"><strong>Only song details are shared, never audio.</strong> You can turn any link off or reset it, and your recent listens stay private unless you choose to share them.</p>
+            </div>
+            <div class="share__list" aria-label="Example: a friend's shared playlist">
+                <div class="share__head"><b>Late night</b><span>shared by Giulia · you have 3 of 4</span></div>
+                <div class="share__row"><div><b>Static Bloom</b><small>Kites at Dusk</small></div><span class="owned">▶ play</span></div>
+                <div class="share__row"><div><b>Low Tide Radio</b><small>The Lowlights</small></div><span class="missing">not in your library</span></div>
+                <div class="share__row"><div><b>Midnight Drive</b><small>Neon Harbor</small></div><span class="owned">▶ play</span></div>
+                <div class="share__row"><div><b>Fern Light</b><small>Mara Vale</small></div><span class="owned">▶ play</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="faq">
+        <div class="split">
+            <div>
+                <p class="tag">questions</p>
+                <h2 class="h2">Before you install.</h2>
+            </div>
+            <div class="faq">
+                <details>
+                    <summary>Do I need Plex or Navidrome?</summary>
+                    <p>No. Without a server you can still search, log songs by hand, make playlists and see your stats. Connecting a server adds automatic logging, owned marks and streaming.</p>
+                </details>
+                <details>
+                    <summary>What about Jellyfin or other servers?</summary>
+                    <p>WAYL connects directly to Navidrome and other Subsonic-compatible servers, and to Plex. Any player that can send plays to a custom ListenBrainz server can also log to WAYL, using a token from Settings.</p>
+                </details>
+                <details>
+                    <summary>Can I use it from my phone?</summary>
+                    <p>Yes, as long as your phone can reach your WAYL: through a reverse proxy with HTTPS, or a private network like Tailscale. The setup guide covers both. A mobile app is planned.</p>
+                </details>
+                <details>
+                    <summary>Can my household share one install?</summary>
+                    <p>Yes. Everyone makes their own account, and each person's servers, plays and playlists stay separate.</p>
+                </details>
+                <details>
+                    <summary>Does it convert audio formats?</summary>
+                    <p>Not yet. Files play as they are, so your browser needs to support the format. MP3, AAC, FLAC, Ogg and Opus all work in current browsers. ALAC usually doesn't.</p>
+                </details>
+                <details>
+                    <summary>What does it cost?</summary>
+                    <p>Nothing. It runs on your own hardware, and the song data comes from free, open databases.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="section closing">
+        <h2 class="h2">Start your music log.</h2>
+        <p class="lede" style="margin-bottom:2rem">All you need is a machine that runs Docker.</p>
+        <div class="actions">
+            <a class="btn" href="setup.html">Set up WAYL</a>
+            <a class="link" href="https://github.com/acrazypie/music_library" rel="noopener">source on github <span class="ico">↗</span></a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <span>wayl · <span data-year></span></span>
+    <nav aria-label="Footer">
+        <a href="setup.html">setup guide</a>
+        <a href="https://github.com/acrazypie/music_library" rel="noopener">github</a>
+        <a href="https://github.com/acrazypie/music_library/issues" rel="noopener">report a problem</a>
+    </nav>
+</footer>
+</body>
+</html>

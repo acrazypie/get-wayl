@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Set up WAYL · self-hosting guide</title>
+    <meta name="description" content="Install WAYL with Docker, connect Plex or Navidrome, and use it away from home. Step by step.">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <script>
+        (function () {
+            var t; try { t = localStorage.getItem("theme"); } catch (e) {}
+            if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", t);
+        })();
+    </script>
+    <link rel="preload" href="assets/fonts/syne-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/dm-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav solid" id="nav" aria-label="Main">
+    <a href="./" class="nav__logo" aria-label="WAYL home"><img src="assets/logo.svg" alt="" width="24" height="24">wayl</a>
+    <div class="nav__links">
+        <a href="./#what">what it does</a>
+        <a href="./#sharing">sharing</a>
+        <a href="setup.html" aria-current="page">setup guide</a>
+        <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch light or dark theme">
+            <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        </button>
+    </div>
+    <button type="button" class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="drawer" id="drawer">
+    <a href="./#what">what it does</a>
+    <a href="./#sharing">sharing</a>
+    <a href="setup.html" aria-current="page">setup guide</a>
+    <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+    <button type="button" class="drawer__theme" data-theme-toggle>
+        <span>theme</span>
+        <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+    </button>
+</div>
+
+<main id="main">
+    <header class="guide-hero">
+        <h1>Set up<br>WAYL.</h1>
+        <p class="lede">Seven steps, each one building on the last. Most people are done in about five minutes.</p>
+    </header>
+
+    <div class="guide">
+        <nav class="toc" aria-label="Steps">
+            <a href="#requirements">what you need</a>
+            <a href="#configure">configure</a>
+            <a href="#start">start</a>
+            <a href="#account">account</a>
+            <a href="#connect">connect a server</a>
+            <a href="#remote">away from home</a>
+            <a href="#maintain">update &amp; back up</a>
+        </nav>
+
+        <div class="steps-wrap">
+            <section class="step" id="requirements">
+                <div class="step__head"><span class="step__n">1</span><h2>What you need</h2></div>
+                <div class="step__body">
+                    <ul class="bullets">
+                        <li>A machine that stays on: a home server, a NAS, a Raspberry Pi 4 or 5, or a small VPS.</li>
+                        <li><strong>Docker</strong> with the Compose plugin, or Podman (see step 3).</li>
+                        <li>Optional: a <strong>Navidrome</strong> (or other Subsonic-compatible) or <strong>Plex</strong> server with your music.</li>
+                    </ul>
+                    <p>Check that Docker is ready:</p>
+                    <div class="code"><pre><code>docker compose version</code></pre></div>
+                </div>
+            </section>
+
+            <section class="step" id="configure">
+                <div class="step__head"><span class="step__n">2</span><h2>Configure</h2></div>
+                <div class="step__body">
+                    <p>Get the code:</p>
+                    <div class="code"><pre><code>git clone https://github.com/acrazypie/music_library.git wayl
+cd wayl</code></pre></div>
+                    <p>Then make a <code>.env</code> file next to <code>docker-compose.yml</code>. Fill in the fields below to build it. <strong>Nothing you type leaves this page.</strong></p>
+
+                    <form class="builder" id="env-form" autocomplete="off">
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="f-url">The address you'll open WAYL at</label>
+                                <input type="text" id="f-url" value="http://192.168.1.20:8000" spellcheck="false" inputmode="url">
+                                <small>Your server's network IP and port, or your domain, like https://music.example.com</small>
+                                <p class="warn" id="url-warn" hidden></p>
+                            </div>
+                            <div class="field">
+                                <label for="f-port">Port</label>
+                                <input type="number" id="f-port" value="8000" min="1" max="65535" inputmode="numeric">
+                            </div>
+                        </div>
+                        <label class="toggle"><span>Behind a reverse proxy</span><small>Caddy, nginx or Traefik handles HTTPS and forwards to WAYL.</small><input type="checkbox" id="f-proxy"></label>
+                        <label class="toggle"><span>Allow servers on my home network</span><small>Keep this on at home. Turn it off only if strangers can sign up.</small><input type="checkbox" id="f-private" checked></label>
+                        <label class="toggle"><span>Send password-reset emails</span><small>If you skip this, reset links show up in the server log instead.</small><input type="checkbox" id="f-mail"></label>
+                        <div class="mail" id="mail-fields" hidden>
+                            <div class="field-row">
+                                <div class="field"><label for="f-smtp">SMTP server</label><input type="text" id="f-smtp" value="smtp.gmail.com" spellcheck="false"></div>
+                                <div class="field"><label for="f-smtp-port">Port</label><input type="number" id="f-smtp-port" value="587" inputmode="numeric"></div>
+                            </div>
+                            <div class="field"><label for="f-from">Send from</label><input type="text" id="f-from" placeholder="you@example.com" spellcheck="false" inputmode="email"><small>Add the password to the file yourself. It isn't asked for here.</small></div>
+                        </div>
+                    </form>
+
+                    <div class="builder-out">
+                        <div class="code"><pre><code id="env-out"></code></pre></div>
+                        <p>Save it as <code>.env</code>. WAYL creates a secret key the first time it starts and keeps it in the data volume.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step" id="start">
+                <div class="step__head"><span class="step__n">3</span><h2>Start WAYL</h2></div>
+                <div class="step__body">
+                    <div class="code"><pre><code>docker compose up -d</code></pre></div>
+                    <p>That starts two containers from the same image:</p>
+                    <ul class="bullets">
+                        <li><strong>wayl</strong> is the web app. It updates its database every time it starts.</li>
+                        <li><strong>worker</strong> keeps your servers in sync in the background: the library every 12 hours, Plex plays every 5 minutes, Navidrome's now playing every minute, and playlists every 6 hours.</li>
+                    </ul>
+                    <p>Check that it's running:</p>
+                    <div class="code"><pre><code id="health-cmd">curl http://localhost:8000/healthz</code></pre></div>
+                    <div class="note"><strong>Using Podman?</strong> Build the image in Docker format first so the health check is kept: <code>podman build --format docker -t wayl:latest . &amp;&amp; podman compose up -d</code></div>
+                </div>
+            </section>
+
+            <section class="step" id="account">
+                <div class="step__head"><span class="step__n">4</span><h2>Make your account</h2></div>
+                <div class="step__body">
+                    <p>Open <a id="open-link" href="#">your WAYL address</a> and sign up with an email and password. Everyone in your home can make their own account, and each person's servers, plays and playlists stay separate.</p>
+                    <p>Try searching for a song and logging it. That works before you connect a server.</p>
+                </div>
+            </section>
+
+            <section class="step" id="connect">
+                <div class="step__head"><span class="step__n">5</span><h2>Connect your music server</h2></div>
+                <div class="step__body">
+                    <p>In WAYL, open <strong>Settings → Music servers</strong>.</p>
+                    <div data-tabs>
+                        <div class="tabs__list" role="tablist" aria-label="Music server">
+                            <button type="button" role="tab" id="t-nd" aria-controls="p-nd" aria-selected="true">Navidrome</button>
+                            <button type="button" role="tab" id="t-plex" aria-controls="p-plex" aria-selected="false" tabindex="-1">Plex</button>
+                        </div>
+                        <div class="tabs__panel" role="tabpanel" id="p-nd" aria-labelledby="t-nd" tabindex="0">
+                            <ol class="bullets">
+                                <li>Enter Navidrome's address <strong>as WAYL's container sees it</strong>: <code>http://navidrome:4533</code> if both run in the same Compose project, otherwise its network address.</li>
+                                <li>Enter your Navidrome username and password. WAYL stores the password encrypted and only ever sends Navidrome a salted hash of it.</li>
+                            </ol>
+                            <p><strong>Optional, for instant logging:</strong> send Navidrome's ListenBrainz plays to WAYL.</p>
+                            <div class="code"><pre><code id="nd-env">ND_LISTENBRAINZ_BASEURL=http://192.168.1.20:8000/listenbrainz/1/</code></pre></div>
+                            <ol class="bullets">
+                                <li>Add that line to Navidrome's settings and restart Navidrome. It applies to the whole Navidrome server.</li>
+                                <li>In WAYL, go to <strong>Settings → Scrobbling → Create token</strong>.</li>
+                                <li>In Navidrome, go to <strong>Personal settings → Scrobble to ListenBrainz</strong> and paste the token.</li>
+                            </ol>
+                            <p>Without this, WAYL checks Navidrome's now playing list every minute, so songs shorter than a minute can be missed.</p>
+                        </div>
+                        <div class="tabs__panel" role="tabpanel" id="p-plex" aria-labelledby="t-plex" tabindex="0" hidden>
+                            <ol class="bullets">
+                                <li>Click <strong>Sign in with Plex</strong>, approve WAYL in the Plex window, then pick a server.</li>
+                                <li>WAYL tries each of the server's addresses, local ones first, and keeps the first one that works.</li>
+                                <li>If none work from inside Docker, choose <strong>Enter address and token instead</strong> and use something like <code>http://plex:32400</code> with your <a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/" rel="noopener">Plex token</a>.</li>
+                            </ol>
+                            <p>WAYL imports your plays from Plex's history: the last 30 days on the first sync, then only new ones. You don't need Plex Pass.</p>
+                        </div>
+                    </div>
+                    <div class="note">Once your server is connected, songs you own get an <strong>owned</strong> mark and a <strong>play</strong> button that streams them in the browser. To search only your own music, turn on <strong>In my library</strong> in Search.</div>
+                </div>
+            </section>
+
+            <section class="step" id="remote">
+                <div class="step__head"><span class="step__n">6</span><h2>Use it away from home</h2></div>
+                <div class="step__body">
+                    <p>To use WAYL on your phone, or to share links with friends later, your WAYL has to be reachable from outside your home network. You can do that in two ways:</p>
+                    <ul class="bullets">
+                        <li><strong>Privately</strong> with <a href="https://tailscale.com" rel="noopener">Tailscale</a> or a similar private network. Only your own devices and people you invite can reach it, and you don't have to open any ports.</li>
+                        <li><strong>Publicly</strong> through a reverse proxy with HTTPS on your own domain. Caddy is the simplest option:</li>
+                    </ul>
+                    <div class="code"><pre><code><span class="c"># Caddyfile</span>
+music.example.com {
+    reverse_proxy localhost:8000
+}</code></pre></div>
+                    <p>Then set <code>APP_URL=https://music.example.com</code> and <code>TRUST_PROXY_HOPS=1</code> (the reverse proxy switch in step 2 does this), and run <code>docker compose up -d</code> again.</p>
+                </div>
+            </section>
+
+            <section class="step" id="maintain">
+                <div class="step__head"><span class="step__n">7</span><h2>Update &amp; back up</h2></div>
+                <div class="step__body">
+                    <p>To update to the latest version:</p>
+                    <div class="code"><pre><code>git pull &amp;&amp; docker compose up -d --build</code></pre></div>
+                    <p><strong>Back up the <code>wayl-data</code> volume.</strong> It holds your database and the key that encrypts your saved server logins. If you lose that key, you'll have to reconnect your servers and everyone will have to sign in again.</p>
+                    <div class="code"><pre><code>docker run --rm -v wayl_wayl-data:/data -v "$PWD":/backup alpine \
+  tar czf /backup/wayl-backup.tgz -C /data .</code></pre></div>
+                    <p>Docker puts the folder name in front of the volume name, so it's <code>wayl_</code> if you cloned into <code>wayl</code>. Run <code>docker volume ls</code> to check.</p>
+                    <div class="note">Stuck? <a href="https://github.com/acrazypie/music_library/issues" rel="noopener">Open an issue</a> with what you tried and the output of <code>docker compose logs --tail=50</code>.</div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <span>wayl · <span data-year></span></span>
+    <nav aria-label="Footer">
+        <a href="./">home</a>
+        <a href="https://github.com/acrazypie/music_library" rel="noopener">github</a>
+        <a href="https://github.com/acrazypie/music_library/issues" rel="noopener">report a problem</a>
+    </nav>
+</footer>
+</body>
+</html>
