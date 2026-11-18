@@ -27,7 +27,7 @@
         <a href="./#what">what it does</a>
         <a href="./#sharing">sharing</a>
         <a href="setup.html" aria-current="page">setup guide</a>
-        <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+        <a href="https://github.com/acrazypie/wayl" rel="noopener">github ↗</a>
         <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch light or dark theme">
             <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
         </button>
@@ -39,7 +39,7 @@
     <a href="./#what">what it does</a>
     <a href="./#sharing">sharing</a>
     <a href="setup.html" aria-current="page">setup guide</a>
-    <a href="https://github.com/acrazypie/music_library" rel="noopener">github ↗</a>
+    <a href="https://github.com/acrazypie/wayl" rel="noopener">github ↗</a>
     <button type="button" class="drawer__theme" data-theme-toggle>
         <span>theme</span>
         <span class="theme-icon"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
@@ -81,7 +81,7 @@
                 <div class="step__head"><span class="step__n">2</span><h2>Configure</h2></div>
                 <div class="step__body">
                     <p>Get the code:</p>
-                    <div class="code"><pre><code>git clone https://github.com/acrazypie/music_library.git wayl
+                    <div class="code"><pre><code>git clone https://github.com/acrazypie/wayl.git wayl
 cd wayl</code></pre></div>
                     <p>Then make a <code>.env</code> file next to <code>docker-compose.yml</code>. Fill in the fields below to build it. <strong>Nothing you type leaves this page.</strong></p>
 
@@ -201,7 +201,7 @@ music.example.com {
                     <div class="code"><pre><code>docker run --rm -v wayl_wayl-data:/data -v "$PWD":/backup alpine \
   tar czf /backup/wayl-backup.tgz -C /data .</code></pre></div>
                     <p>Docker puts the folder name in front of the volume name, so it's <code>wayl_</code> if you cloned into <code>wayl</code>. Run <code>docker volume ls</code> to check.</p>
-                    <div class="note">Stuck? <a href="https://github.com/acrazypie/music_library/issues" rel="noopener">Open an issue</a> with what you tried and the output of <code>docker compose logs --tail=50</code>.</div>
+                    <div class="note">Stuck? <a href="https://github.com/acrazypie/wayl/issues" rel="noopener">Open an issue</a> with what you tried and the output of <code>docker compose logs --tail=50</code>.</div>
                 </div>
             </section>
         </div>
@@ -212,8 +212,8 @@ music.example.com {
     <span>wayl · <span data-year></span></span>
     <nav aria-label="Footer">
         <a href="./">home</a>
-        <a href="https://github.com/acrazypie/music_library" rel="noopener">github</a>
-        <a href="https://github.com/acrazypie/music_library/issues" rel="noopener">report a problem</a>
+        <a href="https://github.com/acrazypie/wayl" rel="noopener">github</a>
+        <a href="https://github.com/acrazypie/wayl/issues" rel="noopener">report a problem</a>
     </nav>
 </footer>
 </body>
